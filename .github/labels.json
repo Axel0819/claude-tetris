@@ -1,0 +1,19 @@
+[
+  { "name": "bug", "color": "d73a4a", "description": "Algo no funciona como debería" },
+  { "name": "enhancement", "color": "a2eeef", "description": "Nueva funcionalidad o mejora" },
+  { "name": "question", "color": "d876e3", "description": "Pregunta o duda sobre el proyecto" },
+  { "name": "documentation", "color": "0075ca", "description": "Relacionado con README, CLAUDE.md u otra documentación" },
+
+  { "name": "area:gameplay", "color": "1d76db", "description": "Lógica del juego: colisiones, rotación, piezas, wall kicks, loop" },
+  { "name": "area:rendering", "color": "5319e7", "description": "Dibujado en canvas: draw(), drawNext(), ghost piece, grid" },
+  { "name": "area:input", "color": "0e8a16", "description": "Controles de teclado y manejo de eventos" },
+  { "name": "area:scoring", "color": "fbca04", "description": "Puntaje, niveles y velocidad de caída" },
+  { "name": "area:ui", "color": "c5def5", "description": "HTML/CSS: overlay, layout, estilos" },
+
+  { "name": "priority:high", "color": "b60205", "description": "Bloquea o rompe la experiencia principal del juego" },
+  { "name": "priority:medium", "color": "e99695", "description": "Afecta la experiencia pero tiene solución alternativa" },
+  { "name": "priority:low", "color": "c2e0c6", "description": "Mejora menor o cosmética" },
+
+  { "name": "needs-info", "color": "cfd3d7", "description": "Falta información para diagnosticar o priorizar el issue" },
+  { "name": "good first issue", "color": "7057ff", "description": "Buen punto de entrada para un primer aporte" }
+]
