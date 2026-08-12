@@ -14,6 +14,8 @@ Este es un Tetris clásico en JavaScript vanilla (Canvas 2D), sin build ni depen
 
 No hay tests ni pipeline de build que ejecutar — el diagnóstico es siempre un análisis estático del código.
 
+**Presupuesto de turnos limitado:** no repitas una llamada `gh`/`Read` que ya ejecutaste, no releas un archivo que ya leíste, y agrupa las lecturas del paso 2 en el menor número de llamadas posible.
+
 ## Pasos
 
 1. **Leer el issue:**
@@ -21,7 +23,7 @@ No hay tests ni pipeline de build que ejecutar — el diagnóstico es siempre un
    gh issue view $ISSUE_NUMBER --repo $REPO --json title,body,labels,author,createdAt
    ```
 
-2. **Leer el código relevante.** Como mínimo `CLAUDE.md`, `game.js`, `index.html`, `style.css`. Usa `Read`/`Grep`/`Glob` — no necesitas `Bash` para esto.
+2. **Leer el código relevante.** Siempre `CLAUDE.md` y `game.js`. Lee además `index.html` y/o `style.css` únicamente si el issue trata de layout, overlay o estilos (área `area:ui`). Usa `Read`/`Grep`/`Glob` — no necesitas `Bash` para esto.
 
 3. **Leer la taxonomía de labels** desde `.github/labels.json` (ya existe en el repo, no la inventes). Elige:
    - Exactamente **un** label de tipo: `bug`, `enhancement`, `question` o `documentation`.
@@ -70,17 +72,18 @@ No hay tests ni pipeline de build que ejecutar — el diagnóstico es siempre un
 
 5. **Publicar como comentario "sticky"** (uno solo por issue, se actualiza en vez de duplicarse):
 
-   Guarda el Markdown del paso 4 en un archivo temporal y luego:
+   Guarda el Markdown del paso 4 con la herramienta `Write` en `diagnostico.md`, y luego:
    ```
    gh api repos/$REPO/issues/$ISSUE_NUMBER/comments --paginate --jq '.[] | select(.body | startswith("<!-- claude-issue-analysis -->")) | .id'
    ```
    - Si devuelve un id → actualiza ese comentario:
      ```
-     gh api -X PATCH repos/$REPO/issues/comments/<id> -f body=@archivo.md
+     gh api -X PATCH repos/$REPO/issues/comments/<id> -F body=@diagnostico.md
      ```
+     **Importante:** usa `-F` (mayúscula), no `-f`. Con `-f` `gh api` envía el texto literal `@diagnostico.md` en vez de leer el archivo; `-F` es obligatorio para que lea el contenido real.
    - Si no devuelve nada → crea uno nuevo:
      ```
-     gh issue comment $ISSUE_NUMBER --repo $REPO --body-file archivo.md
+     gh issue comment $ISSUE_NUMBER --repo $REPO --body-file diagnostico.md
      ```
 
 ## Prohibido

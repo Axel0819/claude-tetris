@@ -11,8 +11,11 @@ concurrency:
 
 jobs:
   triage:
-    # Evita que un bot (incluido claude[bot] al comentar/etiquetar) dispare el workflow en cascada
-    if: github.event.sender.type != 'Bot'
+    # Evita que un bot (incluido claude[bot] al comentar/etiquetar) dispare el workflow en cascada,
+    # y restringe el disparo al owner del repo
+    if: >-
+      github.event.sender.type != 'Bot' &&
+      github.event.sender.login == github.repository_owner
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -43,10 +46,7 @@ jobs:
           # Mismo secret que ya usan claude.yml y claude-code-review.yml
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Permite que el workflow funcione también con issues abiertos por
-          # usuarios sin permiso de escritura en el repo
-          allowed_non_write_users: "*"
           prompt: "/analizar-issue REPO: ${{ github.repository }} ISSUE_NUMBER: ${{ github.event.issue.number }}"
           claude_args: |
-            --allowedTools "Read,Glob,Grep,Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh api:*),Bash(gh label list:*)"
-            --max-turns 25
+            --allowedTools "Read,Glob,Grep,Write,Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh api:*)"
+            --max-turns 40
